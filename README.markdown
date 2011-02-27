@@ -1,6 +1,6 @@
 WebPDF - Quick Guide
 =======================
-A Flash PDF Rendering Engine. *Port created by Ed McManus.*
+A Flash PDF Rendering Engine - not complete. *Created by Ed McManus.*
 
 *Follow me on Twitter!*
 
