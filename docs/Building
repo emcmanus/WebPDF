@@ -1,0 +1,3 @@
+jam -sBUILD=flash
+
+# Expand $ALCHEMY_HOME manually if necessary, and do not include the trailing slash

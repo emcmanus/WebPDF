@@ -79,8 +79,8 @@ if $(OS) = MACOSX
 
     BUILD_X11APP = true ;
 
-    CCFLAGS = -Wall -std=gnu99 ;
-    LINKFLAGS = -L/usr/X11R6/lib ;
+    CCFLAGS = -Wall -std=gnu99 -I/opt/local/include -I/opt/local/include/freetype2 ;	# MacPorts location
+    LINKFLAGS = -L/usr/X11R6/lib -L/opt/local/lib ;
     LINKLIBS = -lfreetype -ljpeg -lz -lm ;
     APPLINKLIBS = -lX11 -lXext ;
 
@@ -136,6 +136,37 @@ if $(OS) = NT
 
     actions WindRes { rc /fo $(<) $(>) }
 }
+
+
+# Overwrite the above definitions with our rules for Flash
+
+if $(BUILD) = flash
+{
+	Echo Adding parameters for FLASH build ;
+
+    BUILD_X11APP = false ;
+	
+    CCFLAGS = -Wall -DOSX -Drestrict="" -emit-llvm -I$(ALCHEMY_HOME)/usr/local/include/freetype2 -fnested-functions -L$(ALCHEMY_HOME)/avm2-libc/lib -L$(ALCHEMY_HOME)/usr/local/lib ;
+	LINKFLAGS = -Wall -swc -L$(ALCHEMY_HOME)/usr/local/lib -L$(ALCHEMY_HOME)/avm2-libc/lib ;
+	
+    LINKLIBS = -ljpeg -lz -lm -lfreetype ;
+	
+    APPLINKLIBS = ;
+	
+	SUFEXE = .swc ;
+	
+    OPTIM = -O5 ;
+	
+	BINDIR      = $(ALCHEMY_HOME)/usr/local/bin ;
+    C++     = g++ ;
+    C++FLAGS    = $(CCFLAGS) ;
+    CC      = gcc ;
+    LIBDIR      = $(ALCHEMY_HOME)/usr/local/lib ;
+    MANDIR      = $(ALCHEMY_HOME)/usr/local/man ;
+	HDRS        = $(ALCHEMY_HOME)/usr/include ;
+	STDHDRS     = $(ALCHEMY_HOME)/usr/include ;
+}
+
 
 # WindRes rule for compiling the windows viewer and plugin
 

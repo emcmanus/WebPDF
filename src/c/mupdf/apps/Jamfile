@@ -4,20 +4,23 @@ FITZLIBS = libmupdf libfitz libfitzdraw libfonts libcmaps ;
 
 SubDir TOP apps ;
 
-Main pdfshow : pdfshow.c ;
-LinkLibraries pdfshow : libpdftool $(FITZLIBS) ;
+if ! ($(OS) = flash)
+{
+	Main pdfshow : pdfshow.c ;
+	LinkLibraries pdfshow : libpdftool $(FITZLIBS) ;
 
-Main pdfclean : pdfclean.c ;
-LinkLibraries pdfclean : libpdftool $(FITZLIBS) ;
+	Main pdfclean : pdfclean.c ;
+	LinkLibraries pdfclean : libpdftool $(FITZLIBS) ;
 
-Main pdfdraw : pdfdraw.c ;
-LinkLibraries pdfdraw : libpdftool $(FITZLIBS) ;
+	Main pdfdraw : pdfdraw.c ;
+	LinkLibraries pdfdraw : libpdftool $(FITZLIBS) ;
 
-Main pdfinfo : pdfinfo.c ;
-LinkLibraries pdfinfo : libpdftool $(FITZLIBS) ;
+	Main pdfinfo : pdfinfo.c ;
+	LinkLibraries pdfinfo : libpdftool $(FITZLIBS) ;
 
-Main pdfextract : pdfextract.c ;
-LinkLibraries pdfextract : libpdftool $(FITZLIBS) ;
+	Main pdfextract : pdfextract.c ;
+	LinkLibraries pdfextract : libpdftool $(FITZLIBS) ;
+}
 
 SubDir TOP apps common ;
 Library libpdfapp : pdfapp.c ;
@@ -33,12 +36,25 @@ if $(BUILD_WINAPP)
     LINKLIBS on mupdf$(SUFEXE) = $(LINKLIBS) $(APPLINKLIBS) ;
 }
 
-if $(BUILD_X11APP)
+if ! ($(OS) = flash)
 {
-    SubDir TOP apps unix ;
-    Main mupdf : x11pdf.c ximage.c ;
-    LinkLibraries mupdf : libpdfapp $(FITZLIBS) ;
-    LINKLIBS on mupdf$(SUFEXE) = $(LINKLIBS) $(APPLINKLIBS) ;
+	if $(BUILD_X11APP)
+	{
+	    SubDir TOP apps unix ;
+	    Main mupdf : x11pdf.c ximage.c ;
+	    LinkLibraries mupdf : libpdfapp $(FITZLIBS) ;
+	    LINKLIBS on mupdf$(SUFEXE) = $(LINKLIBS) $(APPLINKLIBS) ;
+	}
+}
+else
+{
+	# Build Flash-specific Main()
+	
+	SubDir TOP apps flash ;
+	
+	Main libPDF : webpdf.c ;
+	LinkLibraries libPDF : libpdfapp $(FITZLIBS) ;
+	LINKLIBS on libPDF$(SUFEXE) = $(LINKLIBS) $(APPLINKLIBS) ;
 }
 
 if $(BUILD_PLUGIN)

@@ -1,0 +1,21 @@
+Added a bunch of rules to Jamrules
+
+Modifying mupdf/Jamfile to exclude fontdump and cmapdump from the build process.
+
+*WARNING*
+
+You must build the cmap source files before continuing on to the flash build.
+
+First run jam in a clean environment (without alc-on).
+
+Then look into build/your-computer-architecture/
+
+Copy cmap_*.c to mupdf/cmaps/
+
+Copy font_cjk.c to mupdf/fonts/droid/
+
+Copy the remaining font_*.c to mupdf/fonts/
+
+Added CFLAGS to the linker
+
+Adding -Drestrict because llvm isn't honoring the restrict keyword
